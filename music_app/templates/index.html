@@ -1,0 +1,80 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Music Player</title>
+    <link
+      href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.7/mediaelementplayer.min.css"
+      rel="stylesheet"
+    />
+    <link href="{% static 'style.css' %}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <!--  Category  -->
+      <div class="category_section">
+        <span class="category_heading">Select your category :</span>
+        <div class="category">
+          <a class="category_item" href="../">All</a>
+          {% for item in category %}
+          <a class="category_item" href="./{{item}}">{{item}}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <!--  Category  -->
+
+      <!-- music player -->
+      <div class="music_player">
+        {% for item in page_obj %}
+        <div class="player">
+          <div class="cover">
+            <img
+              alt="no_image"
+              class="cover_image"
+              height="300px"
+              width="300px"
+              src="{{item.image.url}}"
+            />
+          </div>
+          <div class="details">
+            <div class="title">
+              <h1 class="song_title">{{item.title}}</h1>
+              <span class="artist">- {{item.artist}}</span>
+            </div>
+            <div class="buttons">
+              <a
+                class="button_change"
+                href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% endif %}"
+                >&lt;</a
+              >
+              <audio class="fc-media">
+                <source
+                  class="fc-source"
+                  src="{% if item.audio_file %}{{item.audio_file.url}} {% else %} {{item.audio_link}} {% endif %}"
+                  type="audio/mp3"
+                />
+              </audio>
+              <a
+                class="button_change"
+                href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }} {% endif %}"
+                >&gt;</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.7/mediaelement-and-player.min.js"></script>
+    <script src="{% static './script.js' %}"></script>
+  </body>
+</html>
